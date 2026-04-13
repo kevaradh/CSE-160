@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Assignment 1</title>
+  <title>Assignment1: Painting</title >
   <style>
     button {
       background-color: white;
@@ -16,6 +16,7 @@
   </style>
 </head>
 <body onload="main()">
+  <p> Keerthi Varadharaj | kevaradh@ucsc.edu</p>
   <canvas id="webgl" width="400" height="400">
     Please use a browser that supports canvas
   </canvas>
@@ -29,6 +30,8 @@
   <button onclick="setShape('triangle')">Triangles</button>
   <button onclick="setShape('circle')">Circles</button>
   <button onclick="drawMyPicture()">Draw Picture</button>
+  <button id="rainbowBtn" onclick="toggleRainbow()">Rainbow Mode: OFF</button>
+
   <br><br>
   <b>Shape Color:</b><br>
   Red <input type="range" id="redSlider" min="0" max="255" value="255">
@@ -42,6 +45,24 @@
   <b>(Circles) Segment Count:</b>
   <input type="range" id="segmentSlider" min="3" max="30" value="10">
 
+  <br><br>
+  <!-- Student Info -->
+  <p><b>Notes to Grader:</b></p>
+  <ul>
+    <li><b>Draw Picture:</b> An ice cream cone drawn using 31+ triangles.
+    The cone uses 6 triangles (3 for upper body, 2 for shoulders,
+    1 for bottom tip). The vanilla scoop is a hemisphere made of
+    12 triangles using Math.cos/sin triangle fan technique.
+    7 colorful sprinkle triangles on top, and initials K V
+    drawn in pink (4 triangles for K, 2 for V).</li>
+
+    <br><br>
+    <p><b>Reference Drawing (Original Sketch):</b></p>
+    <img src="../asgn1_reference.pdf" width="200" height="300"> <br><br>
+    <li><b>Awesome Feature:</b> Rainbow Brush Mode - click the
+    "Rainbow Mode" button to paint with automatically cycling
+    rainbow colors using HSL color wheel conversion!</li>
+  </ul>
   <script src="../lib/webgl-utils.js"></script>
   <script src="../lib/webgl-debug.js"></script>
   <script src="../lib/cuon-utils.js"></script>

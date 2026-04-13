@@ -26,6 +26,8 @@ var u_Size;
 var g_shapesList = [];
 //var g_sizes = [];
 var g_selectedShape = 'point';
+var g_hue = 0; 
+var g_rainbowMode = false;
 
 class Point {
   constructor () {
@@ -86,7 +88,6 @@ class Circle {
       this.color[0], this.color[1],
       this.color[2], this.color[3]);
 
-    // Draw circle using triangles
     for (var angle = 0; angle < Math.PI * 2; angle += d) {
       drawTriangle([
         xy[0], xy[1],
@@ -117,14 +118,12 @@ function main() {
 }
 
 function setupWebGL() {
-  // Get canvas
   canvas = document.getElementById('webgl');
   if (!canvas) {
     console.log('Failed to get canvas');
     return;
   }
 
-  // Get WebGL context
   gl = getWebGLContext(canvas, {preserveDrawingBuffer: true });
   if (!gl) {
     console.log('Failed to get WebGL context');
@@ -133,20 +132,17 @@ function setupWebGL() {
 }
 
 function connectVariablesToGLSL() {
-  // Initialize shaders
   if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
     console.log('Failed to initialize shaders');
     return;
   }
 
-  // Get location of a_Position
   a_Position = gl.getAttribLocation(gl.program, 'a_Position');
   if (a_Position < 0) {
     console.log('Failed to get a_Position');
     return;
   }
 
-  // Get location of u_FragColor
   u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
   if (!u_FragColor) {
     console.log('Failed to get u_FragColor');
@@ -161,13 +157,11 @@ function connectVariablesToGLSL() {
 }
 
 function click(ev) {
-  // Get mouse coordinates
   var x = ev.clientX;
   var y = ev.clientY;
   var rect = ev.target.getBoundingClientRect();
   var shape;
 
-  // Convert to WebGL coordinates (-1 to 1)
   x = ((x - rect.left) - canvas.width/2) / (canvas.width/2);
   y = (canvas.height/2 - (y - rect.top)) / (canvas.height/2);
 
@@ -181,12 +175,19 @@ function click(ev) {
   }
 
   shape.position = [x, y];
-  shape.color = [
-    document.getElementById('redSlider').value / 255,
-    document.getElementById('greenSlider').value / 255,
-    document.getElementById('blueSlider').value / 255,
-    1.0
-  ];
+  if (g_rainbowMode) {
+    var rgb = hslToRgb(g_hue, 100, 50);
+    shape.color = [rgb[0], rgb[1], rgb[2], 1.0];
+    g_hue = (g_hue + 10) % 360;
+  } else {
+    shape.color = [
+      document.getElementById('redSlider').value / 255,
+      document.getElementById('greenSlider').value / 255,
+      document.getElementById('blueSlider').value / 255,
+      1.0
+    ];
+  }
+
   shape.size = document.getElementById('sizeSlider').value;
   g_shapesList.push(shape);
 
@@ -232,7 +233,7 @@ function drawMyPicture() {
   var coneColor = [0.82, 0.57, 0.22, 1.0];
   var vanillaColor = [1.0, 0.97, 0.8, 1.0];
   var chocoColor = [0.4, 0.2, 0.0, 1.0];
-  var initialColor = [0.6, 0.3, 0.0, 1.0]; // dark brown
+  var initialColor = [0.6, 0.3, 0.0, 1.0]; 
 
   gl.uniform4f(u_FragColor, coneColor[0], coneColor[1], coneColor[2], coneColor[3]);
 
@@ -246,27 +247,26 @@ function drawMyPicture() {
   gl.uniform4f(u_FragColor, 1.0, 0.97, 0.8, 1.0);
 
   var centerX = 0.0;
-  var centerY = 0.0;  // center of the scoop
+  var centerY = 0.0;  
   var radius = 0.4;
 
-// Draw semicircle using triangle fan (only top half - Math.PI = 180 degrees)
   var segments = 12;
   var angleStep = Math.PI / segments;
 
   for (var i = 0; i < segments; i++) {
-    var angle1 = i * angleStep;  // start from left
+    var angle1 = i * angleStep;  
     var angle2 = (i + 1) * angleStep;
 
     drawTriangle([
-      centerX, centerY,                                    // center point
-      centerX + radius * Math.cos(angle1),                 // point 1
+      centerX, centerY,                                    
+      centerX + radius * Math.cos(angle1), 
       centerY + radius * Math.sin(angle1),
-      centerX + radius * Math.cos(angle2),                 // point 2
+      centerX + radius * Math.cos(angle2), 
       centerY + radius * Math.sin(angle2)
     ]);
   }
 
-  // SPRINKLES - smaller
+  // SPRINKLES 
   gl.uniform4f(u_FragColor, 1.0, 0.0, 0.0, 1.0);
   drawTriangle([-0.05, 0.05,  0.0, 0.12,   0.05, 0.05]);
 
@@ -285,22 +285,47 @@ function drawMyPicture() {
   gl.uniform4f(u_FragColor, 1.0, 0.5, 0.0, 1.0);
   drawTriangle([ 0.05, 0.1,  0.1, 0.17,   0.15, 0.1]);
 
-// Purple sprinkle
   gl.uniform4f(u_FragColor, 0.6, 0.0, 1.0, 1.0);
   drawTriangle([-0.1, 0.18, -0.05, 0.25,  0.0, 0.18]);
 
-// K - smaller
   gl.uniform4f(u_FragColor, 1.0, 0.0, 0.5, 1.0);
-// K vertical bar
   drawTriangle([-0.18, -0.15, -0.13, -0.15, -0.13, -0.42]);
   drawTriangle([-0.18, -0.15, -0.18, -0.42, -0.13, -0.42]);
-// K upper diagonal
   drawTriangle([-0.13, -0.28, 0.02, -0.15,  -0.08, -0.28]);
-// K lower diagonal
   drawTriangle([-0.13, -0.28, 0.02, -0.42,  -0.08, -0.28]);
 
-// V - no base triangle
   drawTriangle([ 0.1, -0.15,  0.15, -0.15,  0.22, -0.38]);
   drawTriangle([ 0.22, -0.38,  0.28, -0.15,  0.33, -0.15]);
 
 }
+
+function hslToRgb(h, s, l) {
+  s /= 100;
+  l /= 100;
+  let c = (1 - Math.abs(2 * l - 1)) * s;
+  let x = c * (1 - Math.abs((h / 60) % 2 - 1));
+  let m = l - c / 2;
+  let r, g, b;
+
+  if (h < 60)      { r = c; g = x; b = 0; }
+  else if (h < 120){ r = x; g = c; b = 0; }
+  else if (h < 180){ r = 0; g = c; b = x; }
+  else if (h < 240){ r = 0; g = x; b = c; }
+  else if (h < 300){ r = x; g = 0; b = c; }
+  else             { r = c; g = 0; b = x; }
+
+  return [r + m, g + m, b + m];
+}
+
+function toggleRainbow() {
+  g_rainbowMode = !g_rainbowMode;  // flip on/off
+  var btn = document.getElementById('rainbowBtn');
+  if (g_rainbowMode) {
+    btn.textContent = 'Rainbow Mode: ON';
+    btn.style.backgroundColor = 'gold';
+  } else {
+    btn.textContent = 'Rainbow Mode: OFF';
+    btn.style.backgroundColor = 'white';
+  }
+}
+

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Assignment 2: Blocky 3D Animal - Horse</title>
+  <style>
+    body { background:#ffffff; color:#222; font-family:monospace; padding:10px; margin:0; }
+    #webgl { display:block; width:700px; height:500px; border:1px solid #999; }
+    label { display:inline-block; width:160px; font-size:13px; }
+    input[type=range] { width:180px; vertical-align:middle; }
+    .section { margin-top:10px; margin-bottom:4px; font-weight:bold; font-size:13px; }
+    button {
+      margin-top:10px; margin-right:8px; padding:7px 16px;
+      background:#f0f0f0; border:1px solid #999; color:#222;
+      font-family:monospace; font-size:13px; cursor:pointer; border-radius:3px;
+    }
+    button:hover { background:#ddd; }
+    .hint { font-size:11px; color:#777; margin-top:8px; }
+  </style>
+</head>
+<body onload="main()">
+  <p> Keerthi Varadharaj | kevaradh@ucsc.edu</p>
+  <canvas id="webgl" width="700" height="500">
+    Please use a browser that supports canvas
+  </canvas>
+
+  <div class="section">Global Rotation</div>
+  <label>Rotate X:</label>
+  <input type="range" id="rotateX" min="-180" max="180" value="10"><br>
+  <label>Rotate Y:</label>
+  <input type="range" id="rotateY" min="-180" max="180" value="20"><br>
+
+  <div class="section">Front Legs</div>
+  <label>Front Leg Upper:</label>
+  <input type="range" id="frontLegUpper" min="-90" max="90" value="0"><br>
+  <label>Front Leg Lower:</label>
+  <input type="range" id="frontLegLower" min="-90" max="90" value="0"><br>
+  <label>Front Leg Hoof:</label>
+  <input type="range" id="frontLegHoof"  min="-45" max="45" value="0"><br>
+
+  <div class="section">Back Legs</div>
+  <label>Back Leg Upper:</label>
+  <input type="range" id="backLegUpper" min="-90" max="90" value="0"><br>
+  <label>Back Leg Lower:</label>
+  <input type="range" id="backLegLower" min="-90" max="90" value="0"><br>
+  <label>Back Leg Hoof:</label>
+  <input type="range" id="backLegHoof"  min="-45" max="45" value="0"><br>
+
+  <div class="section">Neck &amp; Head</div>
+  <label>Neck Angle:</label>
+  <input type="range" id="neckAngle" min="-10" max="60" value="25"><br>
+  <label>Head Nod:</label>
+  <input type="range" id="headAngle" min="-40" max="30" value="-10"><br>
+
+  <div class="section">Tail</div>
+  <label>Tail Swing:</label>
+  <input type="range" id="tailAngle" min="-40" max="40" value="0"><br>
+  <label>Tail Tip:</label>
+  <input type="range" id="tailTip"   min="-40" max="40" value="0"><br>
+
+  <br>
+  <button id="animBtn">Start Animation</button>
+  <button id="gallopBtn">Start Gallop</button>
+  <span id="fpsDisplay" style="margin-left:16px;font-size:13px;font-family:monospace;color:#333;">FPS: --</span>
+
+  <p class="hint">Drag canvas to rotate &nbsp;|&nbsp; Shift+Click canvas to POKE the horse!</p>
+
+  <script src="../lib/webgl-utils.js"></script>
+  <script src="../lib/webgl-debug.js"></script>
+  <script src="../lib/cuon-utils.js"></script>
+  <script src="../lib/cuon-matrix-cse160.js"></script>
+  <script src="asgn2.js"></script>
+</body>
+</html>

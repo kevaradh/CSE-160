@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Assignment 3 - Virtual World</title>
+  <style>
+    * { margin: 0; padding: 0; }
+    body { overflow: hidden; }
+    canvas { display: block; }
+    #info {
+      position: absolute;
+      top: 10px; left: 10px;
+      color: white;
+      font-family: monospace;
+      font-size: 13px;
+      background: rgba(0,0,0,0.5);
+      padding: 8px 12px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="webgl"></canvas>
+  <div id="info">
+    W/S - Move Forward/Back<br>
+    A/D - Move Left/Right<br>
+    Q/E - Pan Left/Right<br>
+    Mouse Drag - Look Around<br>
+    B - Bird's Eye View<br>
+    F - Add Block<br>
+    G - Delete Block
+  </div>
+  <div id="fps" style="position:absolute; top:10px; right:10px; color:white; font-family:monospace; font-size:16px; background:rgba(0,0,0,0.5); padding:6px 12px; border-radius:4px;">
+    FPS: --
+  </div>
+  <div id="status" style="position:absolute; top:50px; right:10px; color:white; font-family:monospace; font-size:13px; background:rgba(0,0,0,0.5); padding:4px 10px; border-radius:4px;">
+  </div>
+
+  <script src="../lib/webgl-utils.js"></script>
+  <script src="../lib/webgl-debug.js"></script>
+  <script src="../lib/cuon-utils.js"></script>
+  <script src="../lib/cuon-matrix-cse160.js"></script>
+  <script src="Camera.js"></script>
+  <script src="Controls.js"></script>
+  <script src="asgn3.js"></script>
+</body>
+</html>

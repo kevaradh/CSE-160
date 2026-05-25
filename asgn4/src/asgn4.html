@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>CSE160 Assignment 4</title>
+  <style>
+    body { margin: 0; overflow: hidden; font-family: monospace; }
+    #ui {
+      position: absolute; top: 10px; left: 10px;
+      background: rgba(0,0,0,0.7); padding: 10px;
+      border-radius: 6px; color: white; min-width: 210px;
+    }
+    button { display:block; width:100%; padding:7px; margin:4px 0; background:#2a6; color:white; border:1px solid #666; border-radius:4px; cursor:pointer; font-size:12px; font-family:monospace; }
+    #btnSpot   { background:#26a; }
+    #btnNormal { background:#444; }
+    .row { display:flex; align-items:center; margin:3px 0; gap:5px; }
+    .row label { width:32px; font-size:11px; }
+    .row input  { flex:1; }
+    .row span   { width:36px; text-align:right; font-size:11px; }
+    .title { color:#aaa; font-size:10px; margin:6px 0 2px; border-top:1px solid #444; padding-top:5px; text-transform:uppercase; }
+  </style>
+</head>
+<body>
+  <div id="ui">
+    <button id="btnLight">💡 Point Light: ON</button>
+    <button id="btnSpot">🔦 Spot Light: ON</button>
+    <button id="btnNormal">Normals: OFF</button>
+
+    <div class="title">Point Light Position</div>
+    <div class="row"><label>X</label><input type="range" id="sliderX" min="0" max="32" step="0.1" value="16"/><span id="lxVal">16</span></div>
+    <div class="row"><label>Y</label><input type="range" id="sliderY" min="1" max="12" step="0.1" value="6"/> <span id="lyVal">6</span></div>
+    <div class="row"><label>Z</label><input type="range" id="sliderZ" min="0" max="32" step="0.1" value="16"/><span id="lzVal">16</span></div>
+
+    <div class="title">Light Color</div>
+    <div class="row"><label>R</label><input type="range" id="sliderR" min="0" max="1" step="0.01" value="1"/><span id="lrVal">1.00</span></div>
+    <div class="row"><label>G</label><input type="range" id="sliderG" min="0" max="1" step="0.01" value="1"/><span id="lgVal">1.00</span></div>
+    <div class="row"><label>B</label><input type="range" id="sliderB" min="0" max="1" step="0.01" value="1"/><span id="lbVal">1.00</span></div>
+
+    <div class="title">Spot Light Angle</div>
+    <div class="row"><label>Cut</label><input type="range" id="sliderCutoff" min="0.7" max="0.99" step="0.01" value="0.95"/><span id="cutoffVal">0.95</span></div>
+  </div>
+
+  <canvas id="webgl"></canvas>
+  <script src="../lib/webgl-utils.js"></script>
+  <script src="../lib/webgl-debug.js"></script>
+  <script src="../lib/cuon-utils.js"></script>
+  <script src="../lib/cuon-matrix-cse160.js"></script>
+  <script src="asgn4.js" type="module"></script>
+</body>
+</html>

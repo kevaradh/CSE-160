@@ -78,7 +78,7 @@ scene.add(ocean);
 // ── GLB Models ────────────────────────────────────────────────────────────────
 const loader = new GLTFLoader();
 
-loader.load('img/TugBoat.glb', (gltf) => {
+loader.load('./img/TugBoat.glb', (gltf) => {
   const tugboat = gltf.scene;
   tugboat.position.set(300, 9, -500);
   tugboat.scale.set(15, 15, 15);
@@ -86,7 +86,7 @@ loader.load('img/TugBoat.glb', (gltf) => {
   scene.add(tugboat);
 }, undefined, (err) => console.error('TugBoat error:', err));
 
-loader.load('img/Whale_tail.glb', (gltf) => {
+loader.load('./img/Whale_tail.glb', (gltf) => {
   const whale = gltf.scene;
   whale.position.set(-250, 0, -300);
   whale.scale.set(1.5, 1.5, 1.5);
@@ -516,7 +516,7 @@ const icSign = new THREE.Mesh(
 icSign.position.set(0, 6, 3.7);
 iceCreamCart.add(icSign);
 
-iceCreamCart.position.set(-50, 0, 50);
+iceCreamCart.position.set(-115, 0, 20);
 iceCreamCart.scale.set(0.8, 0.8, 0.8);
 scene.add(iceCreamCart);
 
@@ -850,7 +850,7 @@ const dolphinOffsets = [
 ];
 
 dolphinOffsets.forEach(([dx, dy, dz], i) => {
-  loader.load('img/Dolphin.glb', (gltf) => {
+  loader.load('./img/Dolphin.glb', (gltf) => {
     const d = gltf.scene;
     d.position.set(-100 + dx, 0, -500 + dz);
     d.scale.set(3, 3, 3);

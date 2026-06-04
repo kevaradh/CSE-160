@@ -3,18 +3,22 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
 
+// ── Renderer ──────────────────────────────────────────────────────────────────
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
+
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
+// ── Scene ─────────────────────────────────────────────────────────────────────
 const scene = new THREE.Scene();
 RectAreaLightUniformsLib.init();
 
+// ── Skybox ────────────────────────────────────────────────────────────────────
 const cubeLoader = new THREE.CubeTextureLoader();
 scene.background = cubeLoader.load([
   'img/Daylight Box_Right.bmp',
@@ -25,9 +29,11 @@ scene.background = cubeLoader.load([
   'img/Daylight Box_Back.bmp',
 ]);
 
+// ── Camera ────────────────────────────────────────────────────────────────────
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
 camera.position.set(0, 30, 120);
 
+// ── OrbitControls ─────────────────────────────────────────────────────────────
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.05;
@@ -35,6 +41,7 @@ controls.maxPolarAngle = Math.PI / 2.1;
 controls.target.set(0, 0, 0);
 controls.update();
 
+// ── Lights ────────────────────────────────────────────────────────────────────
 const dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
 dirLight.position.set(15, 30, 10);
 scene.add(dirLight);
@@ -45,6 +52,7 @@ scene.add(ambientLight);
 const hemisphereLight = new THREE.HemisphereLight(0x87ceeb, 0xe8d5a3, 0.5);
 scene.add(hemisphereLight);
 
+// ── Sand ──────────────────────────────────────────────────────────────────────
 const sandGeo = new THREE.PlaneGeometry(2000, 1000);
 const sandMat = new THREE.MeshLambertMaterial({ color: 0xe8d5a3 });
 const sand = new THREE.Mesh(sandGeo, sandMat);
@@ -52,6 +60,7 @@ sand.rotation.x = -Math.PI / 2;
 sand.position.set(0, 0, 500);
 scene.add(sand);
 
+// ── Ocean ─────────────────────────────────────────────────────────────────────
 const oceanGeo = new THREE.PlaneGeometry(2000, 1000);
 const oceanMat = new THREE.MeshPhongMaterial({
   color: 0x29a8c4,
@@ -61,30 +70,31 @@ const oceanMat = new THREE.MeshPhongMaterial({
   shininess: 150,
   specular: 0x88ddee,
 });
-
 const ocean = new THREE.Mesh(oceanGeo, oceanMat);
 ocean.rotation.x = -Math.PI / 2;
 ocean.position.set(0, 0, -500);
 scene.add(ocean);
 
+// ── GLB Models ────────────────────────────────────────────────────────────────
 const loader = new GLTFLoader();
+
 loader.load('img/TugBoat.glb', (gltf) => {
   const tugboat = gltf.scene;
-  tugboat.position.set(550, 9, -500);
-  tugboat.scale.set(25, 25, 25);
+  tugboat.position.set(300, 9, -500);
+  tugboat.scale.set(15, 15, 15);
   tugboat.rotation.y = Math.PI / 6;
   scene.add(tugboat);
 }, undefined, (err) => console.error('TugBoat error:', err));
 
 loader.load('img/Whale_tail.glb', (gltf) => {
   const whale = gltf.scene;
-  whale.position.set(-325, 0, -200);
+  whale.position.set(-250, 0, -300);
   whale.scale.set(1.5, 1.5, 1.5);
   whale.rotation.y = Math.PI / 4;
   scene.add(whale);
 }, undefined, (err) => console.error('Whale error:', err));
 
-
+// ── Hot Air Balloon ───────────────────────────────────────────────────────────
 const balloon = new THREE.Group();
 const balloonCanvas = document.createElement('canvas');
 balloonCanvas.width = balloonCanvas.height = 512;
@@ -102,7 +112,7 @@ const basket = new THREE.Mesh(
   new THREE.BoxGeometry(5, 3, 5),
   new THREE.MeshPhongMaterial({ color: 0x8B4513 })
 );
-basket.position.set(0, -18, 0);
+basket.position.set(0, -16, 0);
 balloon.add(basket);
 const ropeMat = new THREE.MeshPhongMaterial({ color: 0x888888 });
 [[ 2, 2],[-2, 2],[ 2,-2],[-2,-2]].forEach(([rx,rz]) => {
@@ -116,6 +126,7 @@ const ropeMat = new THREE.MeshPhongMaterial({ color: 0x888888 });
 balloon.position.set(-80, 50, -150);
 scene.add(balloon);
 
+// ── Airplane ──────────────────────────────────────────────────────────────────
 const airplane = new THREE.Group();
 const planeMat = new THREE.MeshPhongMaterial({ color: 0xeeeeee, shininess: 100 });
 const planeRed = new THREE.MeshPhongMaterial({ color: 0xcc1111 });
@@ -147,6 +158,7 @@ airplane.scale.set(2, 2, 2);
 airplane.rotation.y = Math.PI;
 scene.add(airplane);
 
+// ── Spiked Ball (Sea Mine) ────────────────────────────────────────────────────
 const spikeBall = new THREE.Group();
 const spikeBallCore = new THREE.Mesh(
   new THREE.SphereGeometry(1, 32, 32),
@@ -173,6 +185,7 @@ spikeBall.position.set(-50, 3, -100);
 spikeBall.scale.set(5, 5, 5);
 scene.add(spikeBall);
 
+// ── Kite ──────────────────────────────────────────────────────────────────────
 const kite = new THREE.Group();
 const kiteBody = new THREE.Mesh(new THREE.BoxGeometry(2.0,2.4,0.08),
   new THREE.MeshPhongMaterial({ color: 0xff2200, emissive: 0x440000, side: THREE.DoubleSide }));
@@ -207,12 +220,14 @@ kite.add(new THREE.Mesh(
   seg.position.set(Math.sin(i*0.8)*0.3,-1.8-i*0.5,0);
   kite.add(seg);
 });
-kite.position.set(80, 60, -150); 
+kite.position.set(80, 60, -150); // right side of sky, same area as balloon
 kite.scale.set(10, 10, 10);
 scene.add(kite);
 
+// ── Textured Soccer Ball + Cube ───────────────────────────────────────────────
 const texLoader = new THREE.TextureLoader();
 
+// Soccer ball — use checker pattern texture from threejs
 const soccerTex = texLoader.load('https://threejs.org/examples/textures/checker.png');
 soccerTex.wrapS = THREE.RepeatWrapping;
 soccerTex.wrapT = THREE.RepeatWrapping;
@@ -224,6 +239,7 @@ const soccerBall = new THREE.Mesh(
 soccerBall.position.set(-30, 4, 20);
 scene.add(soccerBall);
 
+// Cube with different texture on each of 6 faces
 const cubeTexUrls = [
   'https://threejs.org/examples/textures/crate.gif',      // right
   'https://threejs.org/examples/textures/crate.gif',      // left
@@ -239,9 +255,10 @@ const texCube = new THREE.Mesh(
   new THREE.BoxGeometry(8, 8, 8),
   faceMaterials
 );
-texCube.position.set(30, 4, 300); 
+texCube.position.set(30, 4, 300); // moved far behind camera
 scene.add(texCube);
 
+// ── Sandcastle ────────────────────────────────────────────────────────────────
 const sandcastle = new THREE.Group();
 const sandMat2 = new THREE.MeshPhongMaterial({ color: 0xe8c87a, emissive: 0x332200 });
 const sandDark  = new THREE.MeshPhongMaterial({ color: 0xc8a855, emissive: 0x221100 });
@@ -279,7 +296,7 @@ sandcastle.scale.set(1.5, 1.5, 1.5);
 sandcastle.position.set(60, 0, 30);
 scene.add(sandcastle);
 
-
+// ── Lifesavers ────────────────────────────────────────────────────────────────
 function makeLifesaver(x, y, z, rotX = 0) {
   const ls = new THREE.Group();
   for (let i = 0; i < 8; i++) {
@@ -303,12 +320,15 @@ ls3.scale.set(2.5, 2.5, 2.5);
 const ls4 = makeLifesaver(-30, 2, -200, Math.PI / 2);
 ls4.scale.set(2.5, 2.5, 2.5);
 
+// ── BEACH SCENE ───────────────────────────────────────────────────────────────
 
+// ── Volleyball Court ──────────────────────────────────────────────────────────
 const courtGroup = new THREE.Group();
 const whiteMat = new THREE.MeshPhongMaterial({ color: 0xffffff });
 const woodMat  = new THREE.MeshPhongMaterial({ color: 0x8B4513 });
 const netMat   = new THREE.MeshPhongMaterial({ color: 0xffffff, transparent: true, opacity: 0.6 });
 
+// Court lines
 [
   [30, 0.1, 0, 0.5, 30],   // left line  [x,y,z, w, d]
   [-30, 0.1, 0, 0.5, 30],  // right line
@@ -342,7 +362,7 @@ courtGroup.add(topRope);
 // Volleyball
 const vball = new THREE.Mesh(
   new THREE.SphereGeometry(2.5, 32, 32),
-  new THREE.MeshPhongMaterial({ color: 0xff6600, emissive: 0x221100, shininess: 60 })
+  new THREE.MeshPhongMaterial({ color: 0xffffff, shininess: 60 })
 );
 vball.position.set(-10, 2.5, 5);
 courtGroup.add(vball);
@@ -351,6 +371,7 @@ courtGroup.position.set(-80, 0, 40);
 courtGroup.scale.set(0.5, 0.5, 0.5);
 scene.add(courtGroup);
 
+// ── Bucket near volleyball court ──────────────────────────────────────────────
 const bucket = new THREE.Group();
 const bucketBody = new THREE.Mesh(
   new THREE.CylinderGeometry(3.5, 2.5, 5, 16),
@@ -359,6 +380,7 @@ const bucketBody = new THREE.Mesh(
 bucketBody.position.set(0, 2.5, 0);
 bucket.add(bucketBody);
 
+// Bucket rim
 const bucketRim = new THREE.Mesh(
   new THREE.TorusGeometry(3.5, 0.4, 8, 24),
   new THREE.MeshPhongMaterial({ color: 0xffcc00, shininess: 80 })
@@ -366,6 +388,7 @@ const bucketRim = new THREE.Mesh(
 bucketRim.position.set(0, 5, 0);
 bucket.add(bucketRim);
 
+// Bucket handle
 const handle = new THREE.Mesh(
   new THREE.TorusGeometry(3, 0.3, 8, 24, Math.PI),
   new THREE.MeshPhongMaterial({ color: 0xffcc00, shininess: 80 })
@@ -374,10 +397,13 @@ handle.position.set(0, 5, 0);
 handle.rotation.x = -Math.PI / 2;
 bucket.add(handle);
 
-bucket.position.set(85, 0, 20);
+bucket.position.set(-55, 0, 42);
 scene.add(bucket);
 
+// ── Shovel near sandcastle ────────────────────────────────────────────────────
 const shovel = new THREE.Group();
+
+// Handle stick
 const shovelStick = new THREE.Mesh(
   new THREE.CylinderGeometry(0.5, 0.5, 18, 8),
   new THREE.MeshPhongMaterial({ color: 0x8B4513, shininess: 20 })
@@ -385,6 +411,7 @@ const shovelStick = new THREE.Mesh(
 shovelStick.position.set(0, 9, 0);
 shovel.add(shovelStick);
 
+// Blade
 const shovelBlade = new THREE.Mesh(
   new THREE.BoxGeometry(6, 0.5, 7),
   new THREE.MeshPhongMaterial({ color: 0xaaaaaa, shininess: 120, specular: 0xffffff })
@@ -392,6 +419,7 @@ const shovelBlade = new THREE.Mesh(
 shovelBlade.position.set(0, 0, 0);
 shovel.add(shovelBlade);
 
+// Grip at top
 const grip = new THREE.Mesh(
   new THREE.BoxGeometry(4, 1, 1),
   new THREE.MeshPhongMaterial({ color: 0x5a3010, shininess: 20 })
@@ -399,12 +427,14 @@ const grip = new THREE.Mesh(
 grip.position.set(0, 18.5, 0);
 shovel.add(grip);
 
-shovel.scale.set(0.5,0.5,0.5);
 shovel.rotation.z = Math.PI / 8; // slightly leaning
 shovel.position.set(80, 0, 25);
 scene.add(shovel);
 
+// ── Ice Cream Cart ────────────────────────────────────────────────────────────
 const iceCreamCart = new THREE.Group();
+
+// Cart body — white box
 const cartBody = new THREE.Mesh(
   new THREE.BoxGeometry(12, 8, 7),
   new THREE.MeshPhongMaterial({ color: 0xffffff, shininess: 40 })
@@ -412,6 +442,7 @@ const cartBody = new THREE.Mesh(
 cartBody.position.set(0, 5, 0);
 iceCreamCart.add(cartBody);
 
+// Cart top lid — light blue
 const cartLid = new THREE.Mesh(
   new THREE.BoxGeometry(12.5, 1, 7.5),
   new THREE.MeshPhongMaterial({ color: 0x88ddff, shininess: 60 })
@@ -419,6 +450,7 @@ const cartLid = new THREE.Mesh(
 cartLid.position.set(0, 9.5, 0);
 iceCreamCart.add(cartLid);
 
+// 4 wheels
 const wheelMat = new THREE.MeshPhongMaterial({ color: 0x333333, shininess: 40 });
 [[-4.5, -3], [4.5, -3], [-4.5, 3], [4.5, 3]].forEach(([wx, wz]) => {
   const wheel = new THREE.Mesh(new THREE.CylinderGeometry(2, 2, 1, 16), wheelMat);
@@ -427,6 +459,7 @@ const wheelMat = new THREE.MeshPhongMaterial({ color: 0x333333, shininess: 40 })
   iceCreamCart.add(wheel);
 });
 
+// Umbrella pole
 const cartPole = new THREE.Mesh(
   new THREE.CylinderGeometry(0.3, 0.3, 18, 8),
   new THREE.MeshPhongMaterial({ color: 0xaaaaaa, shininess: 60 })
@@ -434,6 +467,7 @@ const cartPole = new THREE.Mesh(
 cartPole.position.set(0, 19, 0);
 iceCreamCart.add(cartPole);
 
+// Umbrella canopy — colorful cone segments
 [0xff2200, 0xffee00, 0xff2200, 0xffee00, 0xff2200, 0xffee00, 0xff2200, 0xffee00].forEach((c, i) => {
   const seg = new THREE.Mesh(
     new THREE.ConeGeometry(9, 4, 8, 1, false, (i / 8) * Math.PI * 2, Math.PI / 4),
@@ -443,7 +477,9 @@ iceCreamCart.add(cartPole);
   iceCreamCart.add(seg);
 });
 
+// 3 ice cream cones on top of cart
 [[-3, 0], [0, 0], [3, 0]].forEach(([cx, cz], i) => {
+  // Cone
   const cone = new THREE.Mesh(
     new THREE.ConeGeometry(1.2, 4, 8),
     new THREE.MeshPhongMaterial({ color: 0xd4a574, shininess: 20 })
@@ -452,6 +488,7 @@ iceCreamCart.add(cartPole);
   cone.rotation.z = Math.PI;
   iceCreamCart.add(cone);
 
+  // Scoop
   const scoopColors = [0xff69b4, 0x8B4513, 0xfffacd];
   const scoop = new THREE.Mesh(
     new THREE.SphereGeometry(1.4, 12, 12),
@@ -461,6 +498,7 @@ iceCreamCart.add(cartPole);
   iceCreamCart.add(scoop);
 });
 
+// ICE CREAM sign — canvas texture
 const icSignCanvas = document.createElement('canvas');
 icSignCanvas.width = 256; icSignCanvas.height = 64;
 const icCtx = icSignCanvas.getContext('2d');
@@ -478,11 +516,14 @@ const icSign = new THREE.Mesh(
 icSign.position.set(0, 6, 3.7);
 iceCreamCart.add(icSign);
 
-iceCreamCart.position.set(-115, 0, 20);
+iceCreamCart.position.set(-50, 0, 50);
 iceCreamCart.scale.set(0.8, 0.8, 0.8);
 scene.add(iceCreamCart);
 
+// ── Beach Towel Scene ─────────────────────────────────────────────────────────
 const towelGroup = new THREE.Group();
+
+// Towel
 const towelCanvas = document.createElement('canvas');
 towelCanvas.width = 256; towelCanvas.height = 256;
 const tCtx = towelCanvas.getContext('2d');
@@ -496,11 +537,13 @@ const towel = new THREE.Mesh(
 towel.position.set(0, 0.15, 0);
 towelGroup.add(towel);
 
+// Umbrella pole
 const umbPole = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 18, 8),
   new THREE.MeshPhongMaterial({ color: 0xaaaaaa }));
 umbPole.position.set(-8, 9, -5);
 towelGroup.add(umbPole);
 
+// Umbrella canopy segments
 [0xff2200,0xffee00,0xff2200,0xffee00,0xff2200,0xffee00,0xff2200,0xffee00].forEach((c,i) => {
   const seg = new THREE.Mesh(
     new THREE.ConeGeometry(8, 3, 8, 1, false, (i/8)*Math.PI*2, Math.PI/4),
@@ -510,6 +553,7 @@ towelGroup.add(umbPole);
   towelGroup.add(seg);
 });
 
+// Sunglasses — two torus rings
 [-1.5, 1.5].forEach(x => {
   const lens = new THREE.Mesh(new THREE.TorusGeometry(1.5, 0.3, 8, 24),
     new THREE.MeshPhongMaterial({ color: 0x111111 }));
@@ -523,16 +567,19 @@ bridge.rotation.z = Math.PI / 2;
 bridge.position.set(0, 0.5, 2);
 towelGroup.add(bridge);
 
+// Water bottle
 const bottle = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 5, 16),
   new THREE.MeshPhongMaterial({ color: 0x44aaff, transparent: true, opacity: 0.8 }));
 bottle.position.set(5, 2.5, 3);
 towelGroup.add(bottle);
 
+// Sunscreen
 const sunscreen = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.7, 4, 16),
   new THREE.MeshPhongMaterial({ color: 0xff6600 }));
 sunscreen.position.set(7, 2, 3);
 towelGroup.add(sunscreen);
 
+// Watermelon slice — cone shape
 const wm = new THREE.Mesh(new THREE.ConeGeometry(3, 1, 3),
   new THREE.MeshPhongMaterial({ color: 0xff69b4 }));
 wm.position.set(-3, 0.5, 4);
@@ -542,6 +589,7 @@ const wmRind = new THREE.Mesh(new THREE.ConeGeometry(3.2, 0.8, 3),
 wmRind.position.set(-3, 0.2, 4);
 towelGroup.add(wmRind);
 
+// Beach chair
 const chairGroup = new THREE.Group();
 const chairMat = new THREE.MeshPhongMaterial({ color: 0x1155aa });
 const chairMetal = new THREE.MeshPhongMaterial({ color: 0xcccccc, shininess: 80 });
@@ -564,11 +612,13 @@ towelGroup.position.set(20, 0, 40);
 towelGroup.scale.set(0.8, 0.8, 0.8);
 scene.add(towelGroup);
 
+// ── Black & White Soccer Ball ─────────────────────────────────────────────────
 const soccerCanvas2 = document.createElement('canvas');
 soccerCanvas2.width = soccerCanvas2.height = 512;
 const s2Ctx = soccerCanvas2.getContext('2d');
 s2Ctx.fillStyle = '#ffffff';
 s2Ctx.fillRect(0, 0, 512, 512);
+// Draw black hexagon patches
 function drawHex(ctx, cx, cy, r) {
   ctx.beginPath();
   for (let i = 0; i < 6; i++) {
@@ -588,15 +638,18 @@ const bwSoccerBall = new THREE.Mesh(
 bwSoccerBall.position.set(-45, 4, 75);
 scene.add(bwSoccerBall);
 
+// ── Teal/Pink Textured Cube (canvas texture) ──────────────────────────────────
 const cubeCanvas = document.createElement('canvas');
 cubeCanvas.width = cubeCanvas.height = 512;
 const cCtx = cubeCanvas.getContext('2d');
+// Teal and pink gradient pattern
 const grad = cCtx.createLinearGradient(0, 0, 512, 512);
 grad.addColorStop(0, '#00b4d8');   // teal
 grad.addColorStop(0.5, '#ff69b4'); // hot pink
 grad.addColorStop(1, '#00b4d8');   // teal
 cCtx.fillStyle = grad;
 cCtx.fillRect(0, 0, 512, 512);
+// Add grid pattern
 cCtx.strokeStyle = 'rgba(255,255,255,0.4)';
 cCtx.lineWidth = 4;
 for (let i = 0; i <= 8; i++) {
@@ -612,6 +665,7 @@ attractiveCube.position.set(55, 4, 70);
 scene.add(attractiveCube);
 const tkStatue = new THREE.Group();
 
+// Pedestal base
 const tkBase = new THREE.Mesh(
   new THREE.CylinderGeometry(3, 3.5, 1, 16),
   new THREE.MeshPhongMaterial({ color: 0x888880, shininess: 40 })
@@ -619,6 +673,7 @@ const tkBase = new THREE.Mesh(
 tkBase.position.set(0, 0.5, 0);
 tkStatue.add(tkBase);
 
+// Pedestal pillar
 const tkPillar = new THREE.Mesh(
   new THREE.CylinderGeometry(1.2, 1.5, 5, 16),
   new THREE.MeshPhongMaterial({ color: 0x999990, shininess: 40 })
@@ -626,6 +681,7 @@ const tkPillar = new THREE.Mesh(
 tkPillar.position.set(0, 3.5, 0);
 tkStatue.add(tkPillar);
 
+// Torus knot on top — multicolor vertex colors
 const tkGeo = new THREE.TorusKnotGeometry(4, 1.2, 200, 20, 3, 5);
 const tkPalette = [
   new THREE.Color(0x7b3fa0), new THREE.Color(0x2255aa),
@@ -651,16 +707,21 @@ tkStatue.add(torusKnot);
 tkStatue.position.set(-40, 0, 40);
 scene.add(tkStatue);
 
+// ── Textured Cube on Dodecahedron Pedestal (near court) ───────────────────────
 const cubeStatue = new THREE.Group();
+
+// Gold dodecahedron as base
 const goldDodec = new THREE.Mesh(
   new THREE.DodecahedronGeometry(5, 0),
   new THREE.MeshPhongMaterial({ color: 0xffaa00, emissive: 0x442200, shininess: 150 })
 );
+// Gold dodecahedron — sits alone
 goldDodec.position.set(0, 5, 0);
 cubeStatue.add(goldDodec);
 cubeStatue.position.set(-30, 0, 70);
 scene.add(cubeStatue);
 
+// Textured cube — moved to right side separately
 const cubeOnDodec = new THREE.Mesh(
   new THREE.BoxGeometry(6, 6, 6),
   faceMaterials.map(m => m.clone())
@@ -668,6 +729,7 @@ const cubeOnDodec = new THREE.Mesh(
 cubeOnDodec.position.set(40, 3, 70);
 scene.add(cubeOnDodec);
 
+// Hot pink octahedron
 const pinkOcta = new THREE.Mesh(
   new THREE.OctahedronGeometry(6, 0),
   new THREE.MeshPhongMaterial({ color: 0xff69b4, emissive: 0x440011, shininess: 130 })
@@ -690,14 +752,21 @@ rainbow.position.set(-50, 90, -200);
 rainbow.rotation.x = 0.1;
 scene.add(rainbow);
 
+// ── Ferris Wheel ──────────────────────────────────────────────────────────────
 const ferrisWheel = new THREE.Group();
 const fwMetal = new THREE.MeshPhongMaterial({ color: 0xcccccc, shininess: 120 });
 const fwRed   = new THREE.MeshPhongMaterial({ color: 0xdd2200, emissive: 0x440000 });
 
+// Main ring
 ferrisWheel.add(new THREE.Mesh(new THREE.TorusGeometry(20, 0.8, 16, 64), fwRed));
+
+// Inner ring
 ferrisWheel.add(new THREE.Mesh(new THREE.TorusGeometry(15, 0.4, 12, 48), fwMetal));
+
+// Hub
 ferrisWheel.add(new THREE.Mesh(new THREE.SphereGeometry(2, 16, 16), fwMetal));
 
+// 8 spokes
 for (let i = 0; i < 8; i++) {
   const angle = (i / 8) * Math.PI * 2;
   const spoke = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 20, 8), fwMetal);
@@ -706,6 +775,7 @@ for (let i = 0; i < 8; i++) {
   ferrisWheel.add(spoke);
 }
 
+// 8 cabins
 const cabinColors = [0xff2200,0xff8800,0xffee00,0x00cc44,0x0066ff,0xaa00cc,0xff00aa,0x00cccc];
 const cabins = [];
 for (let i = 0; i < 8; i++) {
@@ -718,6 +788,7 @@ for (let i = 0; i < 8; i++) {
   cabins.push(cabin);
 }
 
+// Stand — separate group so it doesn't rotate
 const ferrisStand = new THREE.Group();
 const fwLegMat = new THREE.MeshPhongMaterial({ color: 0x888888 });
 const legL = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.8, 30, 8), fwLegMat);
@@ -738,6 +809,7 @@ ferrisStand.scale.set(1.8, 1.8, 1.8);
 scene.add(ferrisWheel);
 scene.add(ferrisStand);
 
+// ── Rocket ────────────────────────────────────────────────────────────────────
 const rocket = new THREE.Group();
 const rocketWhite = new THREE.MeshPhongMaterial({ color: 0xdddddd, shininess: 80 });
 const rocketRed   = new THREE.MeshPhongMaterial({ color: 0xdd1111, emissive: 0x440000 });
@@ -767,6 +839,7 @@ rocket.add(flame);
 rocket.position.set(120, 25, 80);
 scene.add(rocket);
 
+// ── WOW POINT: Group of Dolphins jumping across ocean (GLB) ──────────────────
 const dolphins = [];
 const dolphinOffsets = [
   [0,   0,   0],    // leader
@@ -798,12 +871,14 @@ dolphinOffsets.forEach(([dx, dy, dz], i) => {
   }, undefined, (err) => console.error('Dolphin error:', err));
 });
 
+// ── Lifeguard Hut with Brick Texture ─────────────────────────────────────────
 const brickLoader = new THREE.TextureLoader();
 const brickTex = brickLoader.load(
   'https://threejs.org/examples/textures/brick_diffuse.jpg',
   () => { console.log('Brick texture loaded!'); },
   undefined,
   () => {
+    // fallback — use local file if CDN fails
     brickTex.image = null;
   }
 );
@@ -812,6 +887,8 @@ brickTex.wrapT = THREE.RepeatWrapping;
 brickTex.repeat.set(2, 2);
 
 const hut = new THREE.Group();
+
+// Main box — brick textured with MeshStandardMaterial (needed for RectAreaLight)
 const hutBox = new THREE.Mesh(
   new THREE.BoxGeometry(20, 20, 20),
   new THREE.MeshStandardMaterial({ map: brickTex, roughness: 0.8, metalness: 0.1 })
@@ -819,6 +896,7 @@ const hutBox = new THREE.Mesh(
 hutBox.position.set(0, 10, 0);
 hut.add(hutBox);
 
+// Red cone roof
 const hutRoof = new THREE.Mesh(
   new THREE.ConeGeometry(16, 10, 4),
   new THREE.MeshPhongMaterial({ color: 0xdd2200, emissive: 0x440000 })
@@ -827,6 +905,7 @@ hutRoof.position.set(0, 25, 0);
 hutRoof.rotation.y = Math.PI / 4;
 hut.add(hutRoof);
 
+// Window
 const hutWin = new THREE.Mesh(
   new THREE.BoxGeometry(6, 6, 0.5),
   new THREE.MeshPhongMaterial({ color: 0x88ccff, emissive: 0x002244, shininess: 200 })
@@ -834,6 +913,7 @@ const hutWin = new THREE.Mesh(
 hutWin.position.set(0, 12, 10.3);
 hut.add(hutWin);
 
+// Door
 const hutDoor = new THREE.Mesh(
   new THREE.BoxGeometry(5, 8, 0.5),
   new THREE.MeshPhongMaterial({ color: 0x5a3010 })
@@ -841,6 +921,7 @@ const hutDoor = new THREE.Mesh(
 hutDoor.position.set(0, 4, 10.3);
 hut.add(hutDoor);
 
+// LIFEGUARD sign canvas texture
 const signCanvas = document.createElement('canvas');
 signCanvas.width = 256; signCanvas.height = 64;
 const sCtx = signCanvas.getContext('2d');
@@ -862,11 +943,13 @@ hut.position.set(0, 0, 120);
 hut.rotation.y = Math.PI;
 scene.add(hut);
 
+// RectAreaLight — bright warm glow from window
 const rectLight = new THREE.RectAreaLight(0xffcc00, 20, 8, 8);
 rectLight.position.set(0, 12, 110);
 rectLight.lookAt(0, 12, 90); // shine toward camera
 scene.add(rectLight);
 
+// Visible glowing plane at window to show the light
 const windowGlow = new THREE.Mesh(
   new THREE.PlaneGeometry(6, 6),
   new THREE.MeshBasicMaterial({ color: 0xffcc00, side: THREE.DoubleSide })
@@ -874,12 +957,14 @@ const windowGlow = new THREE.Mesh(
 windowGlow.position.set(0, 12, 110.1);
 scene.add(windowGlow);
 
+// ── Camera Mode Toggle ────────────────────────────────────────────────────────
 let walkMode = false;
 window.addEventListener('toggleCameraMode', () => {
   walkMode = !walkMode;
   controls.enabled = !walkMode; // disable orbit when in walk mode
 });
 
+// ── Keyboard Controls (WASD) ──────────────────────────────────────────────────
 const keys = {};
 window.addEventListener('keydown', (e) => { keys[e.key.toLowerCase()] = true; });
 window.addEventListener('keyup',   (e) => { keys[e.key.toLowerCase()] = false; });
@@ -980,4 +1065,3 @@ function animate() {
 }
 
 animate();
-

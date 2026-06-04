@@ -8,10 +8,44 @@
     <h1>CSE160 : Keerthi Varadharaj</h1>
     <ul>
         <!-- Remember to use use relative paths to your html files so it works both locally and on Github Pages -->
-	<li><a href="./asgn5/src/asgn5.html">Assignment 4: Lighting  </a></li>
+	<li><a href="./asgn5/src/asgn5.html">Assignment 5 : Exploring a High-Level Graphics Library </a></li>
         <br>
     </ul>
-    <h2>CSE160 Assignment 4 — Lighting </h2>
+    <p>A 3D interactive beach scene built with Three.js featuring a sandy shore meeting a turquoise ocean under a real daylight skybox. The world includes a tugboat sailing in the distance, a whale tail breaching, a pod of 5 dolphins jumping across the ocean in V-formation, a hot air balloon, airplane, kite, rainbow, ferris wheel, rocket, sandcastle with bucket and shovel, volleyball court with ice cream cart, beach towel scene, and a brick-textured lifeguard hut with a glowing RectAreaLight window. Use W/S/A/D to move the camera, Q/E to move up/down, mouse drag to look around, scroll to zoom. Click the toggle button (top right) to switch between Orbit Mode and Walk Mode.</p>
+
+<p><b>Features:</b></p>
+<ul>
+  <li>Cubemap skybox — 6-sided Daylight Box BMP images</li>
+  <li>TugBoat.glb sailing far in the ocean</li>
+  <li>Whale_tail.glb breaching on the left side of ocean</li>
+  <li>Dolphin.glb x5 in V-formation jumping in and out of ocean</li>
+  <li>Hot air balloon — bobs and rotates with canvas stripe texture</li>
+  <li>Airplane — flies continuously across the sky</li>
+  <li>Kite — sways in wind animation, right side of sky</li>
+  <li>Rainbow — 7 TorusGeometry arcs, fades in and out</li>
+  <li>Ferris wheel — rotating with 8 colored cabins, static stand</li>
+  <li>Rocket — hovering with animated flame, back right of scene</li>
+  <li>Sandcastle with towers, battlements, cones and flag</li>
+  <li>Bucket and shovel next to sandcastle</li>
+  <li>Ice cream cart with umbrella, 3 scoops and ICE CREAM sign — near volleyball court</li>
+  <li>Volleyball court with net, posts, top rope and golden ball</li>
+  <li>Beach towel scene — umbrella, sunglasses, water bottle, sunscreen, watermelon, beach chair</li>
+  <li>Lifeguard hut — Brick_Wall.jpg texture via TextureLoader + LIFEGUARD canvas sign + RectAreaLight window glow</li>
+  <li>Torus knot sculpture on pedestal — vertex colored, shiny, spinning</li>
+  <li>Gold dodecahedron and hot pink octahedron on sand</li>
+  <li>Black and white soccer ball with canvas hexagon texture</li>
+  <li>6-face textured cube — 3 different image textures via TextureLoader, one per face</li>
+  <li>Teal/pink gradient cube with canvas texture — spinning</li>
+  <li>4 Lifesavers — 2 lying on sand, 2 floating and bobbing in ocean</li>
+  <li>Sea mine (spiked ball) bobbing and spinning in ocean</li>
+  <li>3 different light sources — DirectionalLight, AmbientLight, HemisphereLight + RectAreaLight bonus</li>
+  <li>OrbitControls mouse navigation + WASD keyboard camera movement</li>
+  <li>Toggle button — switch between Orbit Mode and Walk Mode</li>
+  <li>20+ primary shapes using 9 different Three.js geometry types</li>
 </ul>
+
+<p><b>Wow Point — Pod of 5 Jumping Dolphins:</b></p>
+<p>Five real 3D dolphin models (Dolphin.glb) swim in V-formation across the ocean — just like the airplane flies across the sky. Each dolphin leaps in and out of the water using a sine wave animation offset by phase: Math.sin(t * 2.0 + i * 0.8) * 12 - 6. The -6 offset shifts the wave below Y=0 so dolphins genuinely dive underwater between jumps, creating a natural staggered leaping effect across the ocean surface.</p>
+
 </body>
 </html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Assignment 5 - Assignment 5: Exploring a High-Level Graphics Library </title>
+  <style>
+    body { margin: 0; }
+    canvas { display: block; }
+
+    #controls-hint {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      background: rgba(0,0,0,0.75);
+      color: #fff;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      padding: 14px 18px;
+      border-radius: 8px;
+      pointer-events: none;
+      line-height: 1.8;
+      backdrop-filter: blur(4px);
+      z-index: 999;
+    }
+
+    #controls-hint p {
+      margin: 0;
+      padding: 0;
+    }
+
+    #toggle-btn {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      background: rgba(0,0,0,0.55);
+      color: #fff;
+      font-family: sans-serif;
+      font-size: 13px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.2);
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      z-index: 100;
+    }
+
+    #toggle-btn:hover {
+      background: rgba(41,168,196,0.6);
+    }
+  </style>
+
+  <script type="importmap"> {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@v0.167.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@v0.167.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <button id="toggle-btn">🖱 Orbit Mode</button>
+
+  <div id="controls-hint">
+    <p>W/S — Move Forward/Back</p>
+    <p>A/D — Move Left/Right</p>
+    <p>Q/E — Move Up/Down</p>
+    <p>Mouse Drag — Look Around</p>
+    <p>Scroll — Zoom In/Out</p>
+    <p>Click Button — Toggle Mode</p>
+  </div>
+
+  <script type="module" src="asgn5.js"></script>
+
+  <script>
+    const btn = document.getElementById('toggle-btn');
+    btn.addEventListener('click', () => {
+      window.dispatchEvent(new CustomEvent('toggleCameraMode'));
+      btn.textContent = btn.textContent.includes('Orbit')
+        ? '⌨️ Walk Mode'
+        : '🖱 Orbit Mode';
+    });
+  </script>
+</body>
+</html>

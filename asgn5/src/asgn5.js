@@ -21,12 +21,12 @@ RectAreaLightUniformsLib.init();
 // ── Skybox ────────────────────────────────────────────────────────────────────
 const cubeLoader = new THREE.CubeTextureLoader();
 scene.background = cubeLoader.load([
-  'img/Daylight Box_Right.bmp',
-  'img/Daylight Box_Left.bmp',
-  'img/Daylight Box_Top.bmp',
-  'img/Daylight Box_Bottom.bmp',
-  'img/Daylight Box_Front.bmp',
-  'img/Daylight Box_Back.bmp',
+  '../img/Daylight Box_Right.bmp',
+  '../img/Daylight Box_Left.bmp',
+  '../img/Daylight Box_Top.bmp',
+  '../img/Daylight Box_Bottom.bmp',
+  '../img/Daylight Box_Front.bmp',
+  '../img/Daylight Box_Back.bmp',
 ]);
 
 // ── Camera ────────────────────────────────────────────────────────────────────
@@ -78,7 +78,7 @@ scene.add(ocean);
 // ── GLB Models ────────────────────────────────────────────────────────────────
 const loader = new GLTFLoader();
 
-loader.load('./img/TugBoat.glb', (gltf) => {
+loader.load('../img/TugBoat.glb', (gltf) => {
   const tugboat = gltf.scene;
   tugboat.position.set(300, 9, -500);
   tugboat.scale.set(15, 15, 15);
@@ -86,7 +86,7 @@ loader.load('./img/TugBoat.glb', (gltf) => {
   scene.add(tugboat);
 }, undefined, (err) => console.error('TugBoat error:', err));
 
-loader.load('./img/Whale_tail.glb', (gltf) => {
+loader.load('../img/Whale_tail.glb', (gltf) => {
   const whale = gltf.scene;
   whale.position.set(-250, 0, -300);
   whale.scale.set(1.5, 1.5, 1.5);
@@ -850,7 +850,7 @@ const dolphinOffsets = [
 ];
 
 dolphinOffsets.forEach(([dx, dy, dz], i) => {
-  loader.load('./img/Dolphin.glb', (gltf) => {
+  loader.load('../img/Dolphin.glb', (gltf) => {
     const d = gltf.scene;
     d.position.set(-100 + dx, 0, -500 + dz);
     d.scale.set(3, 3, 3);
@@ -1065,3 +1065,4 @@ function animate() {
 }
 
 animate();
+

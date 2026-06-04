@@ -21,12 +21,12 @@ RectAreaLightUniformsLib.init();
 // ── Skybox ────────────────────────────────────────────────────────────────────
 const cubeLoader = new THREE.CubeTextureLoader();
 scene.background = cubeLoader.load([
-  '../img/Daylight Box_Right.bmp',
-  '../img/Daylight Box_Left.bmp',
-  '../img/Daylight Box_Top.bmp',
-  '../img/Daylight Box_Bottom.bmp',
-  '../img/Daylight Box_Front.bmp',
-  '../img/Daylight Box_Back.bmp',
+  '../img/Daylight_Box_Right.bmp',
+  '../img/Daylight_Box_Left.bmp',
+  '../img/Daylight_Box_Top.bmp',
+  '../img/Daylight_Box_Bottom.bmp',
+  '../img/Daylight_Box_Front.bmp',
+  '../img/Daylight_Box_Back.bmp',
 ]);
 
 // ── Camera ────────────────────────────────────────────────────────────────────
@@ -397,7 +397,7 @@ handle.position.set(0, 5, 0);
 handle.rotation.x = -Math.PI / 2;
 bucket.add(handle);
 
-bucket.position.set(-55, 0, 42);
+bucket.position.set(85, 0, 20);
 scene.add(bucket);
 
 // ── Shovel near sandcastle ────────────────────────────────────────────────────
